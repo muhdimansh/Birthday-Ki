@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171522">
+<title>Tiga Bab, Satu Takdir</title>
+<style>
+:root{--bg:#11101a;--panel:#1c1a29;--panel2:#252238;--gold:#e9c887;--pink:#e9a8c1;--text:#f7f2ed;--muted:#bdb6c9;--good:#8dd6b0;--bad:#f09c9c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#29213b 0%,#11101a 60%);color:var(--text);font-family:Georgia,'Times New Roman',serif;min-height:100vh;line-height:1.65}
+button,input{font:inherit}button{cursor:pointer;border:1px solid #625575;background:#332b45;color:var(--text);padding:11px 16px;border-radius:12px;transition:.2s}button:hover{background:#443653;transform:translateY(-1px)}button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.wrap{max-width:780px;margin:auto;padding:22px 16px 60px}.top{display:flex;justify-content:space-between;gap:10px;align-items:center;color:var(--gold);font-size:.88rem;letter-spacing:.08em;text-transform:uppercase}.progress{height:5px;background:#353044;border-radius:9px;overflow:hidden;margin:14px 0 28px}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--gold));transition:width .4s}
+.panel{background:linear-gradient(145deg,rgba(38,34,55,.97),rgba(25,23,37,.98));border:1px solid #494057;border-radius:22px;padding:clamp(20px,5vw,36px);box-shadow:0 18px 55px #0004}
+.kicker{color:var(--pink);text-transform:uppercase;letter-spacing:.15em;font-size:.78rem}.title{font-size:clamp(2rem,7vw,3.3rem);line-height:1.1;margin:10px 0 18px;color:var(--gold);font-weight:normal}.story{font-size:1.08rem;color:#e9e2ee}.muted{color:var(--muted)}.center{text-align:center}.symbol{font-size:2.5rem;margin:8px 0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.primary{background:linear-gradient(120deg,#8e587d,#9b7946);border-color:#d5b57e}.wide{width:100%}.choices{display:grid;gap:10px;margin:18px 0}.choice{text-align:left;background:#29253a;border-color:#51465f}.choice.selected{border-color:var(--gold);background:#40334c}.choice.correct{border-color:var(--good)}.choice.wrong{border-color:var(--bad)}.feedback{min-height:32px;color:var(--muted);margin-top:12px}.puzzle{margin:20px 0;padding:18px;background:#151421;border:1px solid #41384e;border-radius:16px}.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px 0}.tile{min-height:62px;font-size:.95rem;padding:8px}.tile.picked{border-color:var(--gold);background:#514052}.tile.locked{opacity:.55}.sequence{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:16px 0}.token{border:1px solid #655773;border-radius:10px;padding:8px 12px;background:#2b263b}.word-input{width:100%;background:#100f18;border:1px solid #5c5068;border-radius:10px;padding:13px;color:white}.small{font-size:.9rem}.hidden{display:none!important}.chapter-nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}.pill{font-size:.78rem;padding:5px 9px;border:1px solid #625575;border-radius:99px;color:var(--muted)}.pill.active{color:var(--gold);border-color:var(--gold)}.timer{font-variant-numeric:tabular-nums;color:var(--gold)}.ending{white-space:pre-line;font-size:1.08rem}.footer{text-align:center;color:#93899e;font-size:.8rem;margin-top:22px}
+@media(max-width:480px){.top{font-size:.72rem}.panel{border-radius:17px}.tile{font-size:.82rem;padding:6px;min-height:58px}.actions button{flex:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span>✦ Sebuah perjalanan rahsia</span><span id="clock" class="timer">00:00</span></div>
+  <div class="progress"><div id="bar" class="bar"></div></div>
+  <div id="app"></div>
+  <div class="footer">Dibina daripada tiga perkara kecil yang membawa makna besar.</div>
+</div>
+<script>
+(() => {
+const app=document.getElementById('app'), bar=document.getElementById('bar'), clock=document.getElementById('clock');
+const chapters=[
+ {name:'Bab I — Langkah',symbol:'👣',subtitle:'Setiap perjalanan bermula dengan satu langkah',gift:'KASUT',
+  intro:'Ada masa depan yang belum kelihatan. Ada impian yang terasa terlalu jauh. Tetapi perjalanan yang indah tidak bermula dengan lompatan besar—ia bermula apabila seseorang memilih untuk terus melangkah, walaupun jalannya belum sempurna.',
+  bridge:'Kamu sudah menemui arah. Ingatlah: langkah kecil yang diulang dengan berani akhirnya menjadi perjalanan yang jauh.',
+  tasks:[
+   {type:'path',title:'1. Laluan menuju esok',text:'Pilih empat batu laluan mengikut urutan yang paling masuk akal: mula dengan niat, teruskan dengan usaha, belajar daripada cabaran, dan akhirnya tiba pada hasil.',items:['Menuai hasil','Menetapkan niat','Berusaha setiap hari','Berhenti sebelum bermula','Belajar daripada jatuh','Menunggu tanpa bergerak'],answer:['Menetapkan niat','Berusaha setiap hari','Belajar daripada jatuh','Menuai hasil'],explain:'Niat memberi arah, usaha menggerakkan kita, kegagalan mengajar, dan hasil datang selepas perjalanan.'},
+   {type:'riddle',title:'2. Teka-teki jejak',text:'Aku tidak mempunyai suara, tetapi aku meninggalkan tanda. Aku tidak tahu destinasi, namun aku membawamu ke sana. Apakah aku?',options:['Bayang-bayang','Langkah kaki','Jam yang berhenti','Pintu yang terkunci'],answer:'Langkah kaki',explain:'Setiap langkah ialah bukti bahawa kita sedang bergerak, walaupun destinasi masih jauh.'},
+   {type:'order',title:'3. Susun semula perjalanan',text:'Susun empat peringkat ini daripada yang paling awal hingga yang terakhir. Tekan satu demi satu mengikut urutan.',items:['Kejayaan','Cabaran','Keputusan untuk bermula','Pengalaman'],answer:['Keputusan untuk bermula','Cabaran','Pengalaman','Kejayaan'],explain:'Kejayaan bukan titik mula. Ia tumbuh daripada keputusan, cabaran dan pengalaman.'},
+   {type:'riddle',title:'4. Persimpangan',text:'Di persimpangan, satu jalan mudah tetapi tidak membawamu ke impian. Satu lagi sukar, tetapi mendekatkanmu kepadanya. Apakah yang paling wajar kamu ikut?',options:['Jalan yang paling mudah setiap masa','Jalan yang selari dengan tujuan dan nilai','Jalan yang dipilih orang ramai','Tidak memilih langsung'],answer:'Jalan yang selari dengan tujuan dan nilai',explain:'Jalan yang baik bukan sentiasa mudah; ia jalan yang membawa kita ke arah yang bermakna.'},
+   {type:'code',title:'5. Kunci gerbang',text:'Gerbang terakhir terbuka dengan perkataan yang melengkapkan ayat ini: “Semua perjalanan yang jauh bermula dengan satu ____.”',answer:'langkah',explain:'Kamu tidak perlu melihat seluruh tangga. Cukup berani mengambil langkah pertama.'}
+  ]},
+ {name:'Bab II — Melodi',symbol:'🎧',subtitle:'Di tengah bising, temukan bunyi yang menenangkan',gift:'EARPHONE',
+  intro:'Dunia kadangkala terlalu kuat. Suara orang, tuntutan, kebimbangan dan fikiran sendiri bertindih sehingga hati tidak tahu mana satu perlu didengar. Namun, di sebalik kekacauan, masih ada melodi yang lembut—jika kita belajar membezakan bunyi daripada makna.',
+  bridge:'Kamu tidak menghapuskan dunia yang bising. Kamu belajar mencari ruang untuk mendengar dengan lebih jelas. Kadangkala, ketenangan bukan dunia yang senyap—tetapi hati yang menemui melodinya.',
+  tasks:[
+   {type:'memory',title:'1. Irama yang tersembunyi',text:'Perhatikan urutan simbol selama beberapa saat, kemudian ulang urutan itu daripada ingatan. Urutan akan dirahsiakan selepas kamu menekan “Sembunyikan”.',sequence:['♪','♫','♬','♪','♩'],answer:['♪','♫','♬','♪','♩'],explain:'Mendengar dengan teliti memerlukan perhatian. Cuba sekali lagi jika tersilap; irama tidak ke mana.'},
+   {type:'riddle',title:'2. Bunyi yang bukan jawapan',text:'Dalam bilik penuh suara, apakah tindakan paling membantu untuk memahami seseorang yang sedang bercakap?',options:['Meninggikan suara supaya menang','Mendengar hingga selesai sebelum menjawab','Meneka maksudnya sebelum dia habis','Mengabaikan semua orang'],answer:'Mendengar hingga selesai sebelum menjawab',explain:'Ketenangan bermula apabila kita memberi ruang kepada suara lain, bukan menenggelamkannya.'},
+   {type:'sequence',title:'3. Tukarkan kacau menjadi harmoni',text:'Pilih tindakan yang paling sesuai untuk menenangkan suasana, daripada langkah pertama hingga terakhir.',items:['Tarik nafas dan berhenti seketika','Kenal pasti perkara sebenar yang berlaku','Dengar pandangan setiap pihak','Cari penyelesaian yang dipersetujui'],answer:['Tarik nafas dan berhenti seketika','Kenal pasti perkara sebenar yang berlaku','Dengar pandangan setiap pihak','Cari penyelesaian yang dipersetujui'],explain:'Berhenti seketika membantu kita berfikir; memahami dahulu membuka ruang kepada penyelesaian.'},
+   {type:'riddle',title:'4. Alat kecil, ruang besar',text:'Aku boleh membawamu ke lagu yang kau suka, tetapi aku juga mengingatkan bahawa kau boleh memilih apa yang mahu didengar. Aku dipakai di telinga. Apakah aku?',options:['Jam tangan','Cermin mata','Earphone','Buku nota'],answer:'Earphone',explain:'Kadangkala satu melodi yang tepat memberi ruang untuk menarik nafas dan menyusun semula fikiran.'},
+   {type:'code',title:'5. Kata rahsia melodi',text:'Lengkapkan ayat ini dengan satu perkataan: “Apabila kita benar-benar mendengar, bunyi yang berselerak boleh menjadi ____.”',answer:'melodi',explain:'Bukan semua bunyi perlu dilawan. Ada yang menjadi indah apabila kita mendengarnya dengan hati.'}
+  ]},
+ {name:'Bab III — Damai',symbol:'🕊️',subtitle:'Ada kata-kata yang sampai ke hati tanpa mengetuk pintu',gift:'BUKU',
+  intro:'Ada kata-kata yang menyembuhkan tanpa menyentuh. Ada ayat ringkas yang mengubah cara seseorang melihat dirinya, dunia, malah hari esok. Kata-kata yang baik tidak memaksa hati terbuka; ia membuat hati berasa cukup selamat untuk terbuka sendiri.',
+  bridge:'Kamu sudah sampai ke tempat yang paling sunyi—bukan kerana tiada suara, tetapi kerana hati akhirnya memahami apa yang benar-benar penting.',
+  tasks:[
+   {type:'riddle',title:'1. Pilih kata yang membina',text:'Seseorang melakukan kesilapan dan berasa dirinya tidak berguna. Ayat manakah paling mungkin membantunya bangkit tanpa menafikan kesilapannya?',options:['“Kau memang selalu gagal.”','“Lupakan sahaja, itu bukan masalah.”','“Kau tersilap kali ini, tetapi kau masih boleh belajar dan mencuba lagi.”','“Jangan bercakap tentangnya.”'],answer:'“Kau tersilap kali ini, tetapi kau masih boleh belajar dan mencuba lagi.”',explain:'Kata yang membina mengakui kenyataan sambil memberi ruang untuk berubah.'},
+   {type:'order',title:'2. Surat yang menyentuh hati',text:'Susun mesej ini supaya ia bergerak daripada memahami perasaan kepada harapan yang tulus.',items:['Aku percaya kau boleh melangkah lagi.','Aku tahu hari ini terasa berat.','Kau tidak perlu menyelesaikan semuanya sekaligus.','Aku ada di sini untuk mendengar.'],answer:['Aku tahu hari ini terasa berat.','Aku ada di sini untuk mendengar.','Kau tidak perlu menyelesaikan semuanya sekaligus.','Aku percaya kau boleh melangkah lagi.'],explain:'Empati dahulu, kemudian hadir, beri ruang, dan akhirnya nyalakan harapan.'},
+   {type:'riddle',title:'3. Perpustakaan tanpa dinding',text:'Aku menyimpan suara orang yang mungkin tidak pernah kau temui. Aku boleh mengubah fikiran, membuka dunia dan menemani malam yang panjang. Apakah aku?',options:['Buku','Kunci','Peta jalan raya','Cawan'],answer:'Buku',explain:'Di dalam buku, kata-kata merentasi masa dan menemukan tempat baharu di dalam hati pembacanya.'},
+   {type:'code',title:'4. Perkataan yang menyatukan',text:'Isi tempat kosong: “Kata-kata yang ikhlas tidak semestinya mengubah seluruh dunia; kadangkala ia mengubah ____ seseorang.”',answer:'hati',explain:'Satu hati yang disentuh dengan baik mungkin membawa perubahan yang jauh lebih besar daripada yang kita nampak.'},
+   {type:'final',title:'5. Tiga kunci, satu makna',text:'Kamu telah melalui tiga bab. Lengkapkan tiga perkataan hadiah mengikut urutan: sesuatu untuk melangkah, sesuatu untuk mendengar melodi, dan sesuatu yang menyimpan kata-kata.',answer:'kasut, earphone, buku',explain:'Tiga hadiah kecil. Tiga cara untuk menemani perjalanan, memberi ruang kepada melodi, dan menyimpan kata-kata.'}
+  ]}
+];
+let chapter=0, task=0, solved=0, started=Date.now(), hintUsed=0, picked=[], sequenceShown=true, memSequence=[], memInput=[], locked=false;
+let totalTasks=chapters.reduce((n,c)=>n+c.tasks.length,0);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function updateClock(){let sec=Math.floor((Date.now()-started)/1000),m=String(Math.floor(sec/60)).padStart(2,'0'),s=String(sec%60).padStart(2,'0');clock.textContent=`${m}:${s}`;setTimeout(updateClock,1000)} updateClock();
+function progress(){bar.style.width=(solved/totalTasks*100)+'%'}
+function shell(kicker,title,body,buttons=''){app.innerHTML=`<section class="panel"><div class="kicker">${kicker}</div><h1 class="title">${title}</h1>${body}${buttons}</section>`}
+function start(){shell('Untuk seseorang yang istimewa','Tiga Bab, Satu Takdir',`<div class="symbol">✦ ✧ ✦</div><p class="story">Ada tiga hadiah yang menunggu untuk ditemukan. Tetapi sebelum kamu tahu apakah hadiah itu, kamu perlu melalui tiga perjalanan—tentang <b>langkah</b> yang membawa kita ke masa depan, <b>melodi</b> yang menenangkan kekacauan, dan <b>kata-kata</b> yang memulihkan hati.</p><p class="story">Setiap bab mempunyai lima cabaran. Baca cerita, selesaikan permainan, dan kumpulkan petunjuk. Jawapan yang salah tidak akan menghukum kamu—cuba lagi, fikir semula, dan teruskan.</p><p class="muted small">Anggaran masa: 15–20 minit jika kamu membaca cerita dan memikirkan setiap cabaran dengan tenang.</p>`,`<div class="actions"><button class="primary wide" onclick="begin()">Mulakan perjalanan →</button></div>`)}
+function begin(){chapter=0;task=0;solved=0;hintUsed=0;started=Date.now();showChapterIntro()}
+function showChapterIntro(){let c=chapters[chapter];shell(`Bab ${chapter+1} daripada 3`,c.symbol+' '+c.name,`<p class="story"><i>${c.subtitle}</i></p><p class="story">${c.intro}</p><p class="muted">Petunjuk akan muncul sedikit demi sedikit. Jangan terburu-buru; setiap bab ada sesuatu yang mahu disampaikan.</p>`,`<div class="actions"><button class="primary wide" onclick="renderTask()">Masuk ke bab ini →</button></div>`);progress()}
+function renderTask(){locked=false;picked=[];let c=chapters[chapter],t=c.tasks[task];let body=`<div class="chapter-nav">${chapters.map((x,i)=>`<span class="pill ${i===chapter?'active':''}">${i<chapter?'✓ ':''}${x.name}</span>`).join('')}</div><p class="story">${esc(t.text)}</p><div class="puzzle" id="puzzle">${taskContent(t)}</div><div id="feedback" class="feedback" aria-live="polite"></div><p class="muted small">Cabaran ${task+1} / ${c.tasks.length} · Jawapan salah boleh dicuba semula.</p>`;
+shell(`${c.name} · Cabaran ${task+1}`,t.title,body,`<div class="actions"><button onclick="showHint()">Minta petunjuk</button><button id="checkBtn" class="primary" onclick="checkAnswer()">Semak jawapan</button></div>`);
+progress()}
+function taskContent(t){
+ if(t.type==='riddle')return `<div class="choices">${t.options.map((x,i)=>`<button class="choice" onclick="choose(this,${i})">${esc(x)}</button>`).join('')}</div>`;
+ if(t.type==='code')return `<input id="answerInput" class="word-input" autocomplete="off" placeholder="Taip jawapan di sini…">`;
+ if(t.type==='path'||t.type==='order'||t.type==='sequence')return `<p class="small muted">${t.type==='path'?'Pilih semua yang betul mengikut urutan.':'Pilih item mengikut urutan yang betul.'}</p><div id="chosen" class="sequence"></div><div class="tiles">${t.items.map((x,i)=>`<button class="tile" data-index="${i}" onclick="pickItem(this)">${esc(x)}</button>`).join('')}</div><button onclick="undoPick()">Undur satu pilihan</button>`;
+ if(t.type==='memory'){memSequence=[...t.sequence];memInput=[];sequenceShown=true;return `<p id="sequenceDisplay" class="sequence">${t.sequence.map(x=>`<span class="token" style="font-size:1.6rem">${x}</span>`).join('')}</p><button id="hideSeq" onclick="hideSequence()">Sembunyikan urutan</button><div id="memoryChoices" class="choices hidden">${['♪','♫','♬','♩','♭'].map((x,i)=>`<button class="choice" onclick="memoryPick('${x}')">${x}</button>`).join('')}</div><p id="memoryProgress" class="muted small">Hafal urutan, kemudian sembunyikannya.</p><button id="resetMemory" class="hidden" onclick="resetMemory()">Cuba semula</button>`}
+ if(t.type==='final')return `<input id="answerInput" class="word-input" autocomplete="off" placeholder="Tiga hadiah, pisahkan dengan koma…">`;
+ return '';
+}
+function choose(btn,i){if(locked)return;document.querySelectorAll('.choice').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');btn.dataset.chosen='1';document.querySelectorAll('.choice').forEach(b=>{if(b!==btn)delete b.dataset.chosen});}
+function pickItem(btn){if(locked||btn.classList.contains('locked'))return;btn.classList.add('locked');picked.push({value:btn.textContent,index:Number(btn.dataset.index)});let out=document.getElementById('chosen');out.innerHTML=picked.map((p,i)=>`<span class="token">${i+1}. ${esc(p.value)}</span>`).join('')}
+function undoPick(){if(!picked.length)return;let p=picked.pop();let b=document.querySelector(`[data-index="${p.index}"]`);if(b)b.classList.remove('locked');document.getElementById('chosen').innerHTML=picked.map((x,i)=>`<span class="token">${i+1}. ${esc(x.value)}</span>`).join('')}
+function hideSequence(){sequenceShown=false;document.getElementById('sequenceDisplay').innerHTML='?　?　?　?　?';document.getElementById('hideSeq').classList.add('hidden');document.getElementById('memoryChoices').classList.remove('hidden');document.getElementById('memoryProgress').textContent='Pilih simbol satu demi satu mengikut urutan yang kamu ingat.'}
+function memoryPick(x){if(sequenceShown||locked)return;memInput.push(x);document.getElementById('memoryProgress').textContent='Pilihan kamu: '+memInput.join('  ');if(memInput.length===memSequence.length){document.getElementById('feedback').textContent='Urutan sudah lengkap. Tekan “Semak jawapan”.';}}
+function resetMemory(){memInput=[];document.getElementById('memoryProgress').textContent='Cuba ingat semula urutan dan pilih simbol satu demi satu.';document.getElementById('feedback').textContent=''}
+function normalize(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[“”"'.!?]/g,'').replace(/\s+/g,' ').trim()}
+function checkAnswer(){if(locked)return;let t=chapters[chapter].tasks[task],ok=false;
+ if(t.type==='riddle'){let b=document.querySelector('.choice[data-chosen="1"]');ok=!!b&&normalize(b.textContent)===normalize(t.answer)}
+ else if(t.type==='code'||t.type==='final'){let el=document.getElementById('answerInput');let val=normalize(el.value).replace(/\s*,\s*/g,',');let ans=normalize(t.answer).replace(/\s*,\s*/g,',');ok=val===ans|| (t.type==='code'&&val===ans.replace(/[.,]/g,''));}
+ else if(t.type==='path'||t.type==='order'||t.type==='sequence'){let vals=picked.map(x=>x.value);ok=vals.length===t.answer.length&&vals.every((x,i)=>normalize(x)===normalize(t.answer[i]));}
+ else if(t.type==='memory'){ok=memInput.length===memSequence.length&&memInput.every((x,i)=>x===memSequence[i]);}
+ if(ok){locked=true;solved++;progress();let f=document.getElementById('feedback');f.innerHTML=`<span style="color:var(--good)">✓ Tepat.</span> ${esc(t.explain)}`;document.getElementById('checkBtn').textContent='Teruskan →';document.getElementById('checkBtn').onclick=nextTask;document.querySelectorAll('#puzzle button,#puzzle input').forEach(x=>x.disabled=true);if(t.type==='memory')document.getElementById('resetMemory').classList.add('hidden');}
+ else{let f=document.getElementById('feedback');f.innerHTML='<span style="color:var(--bad)">Belum tepat.</span> Cuba lagi. Baca petunjuk dan fikirkan maksudnya, bukan sekadar meneka.';if(t.type==='memory')document.getElementById('resetMemory').classList.remove('hidden');}
+}
+function showHint(){let t=chapters[chapter].tasks[task];hintUsed++;let hints={
+ 'Laluan menuju esok':'Petunjuk: niat → usaha → belajar daripada cabaran → hasil.',
+ 'Teka-teki jejak':'Petunjuk: fikirkan sesuatu yang tertinggal di belakang apabila seseorang berjalan.',
+ 'Susun semula perjalanan':'Petunjuk: keputusan datang sebelum cabaran; kejayaan biasanya datang selepas pengalaman.',
+ 'Persimpangan':'Petunjuk: fikirkan nilai dan destinasi yang kamu mahu capai.',
+ 'Kunci gerbang':'Petunjuk: satu tapak kaki ke hadapan.',
+ 'Irama yang tersembunyi':'Petunjuk: ada lima simbol. Perhatikan bentuk simbol dan susunannya, bukan bunyinya.',
+ 'Bunyi yang bukan jawapan':'Petunjuk: beri orang itu ruang untuk habiskan ayat.',
+ 'Tukarkan kacau menjadi harmoni':'Petunjuk: tenangkan diri dahulu, fahami masalah, dengar, kemudian cari jalan.',
+ 'Alat kecil, ruang besar':'Petunjuk: aksesori audio yang biasa dipakai di telinga.',
+ 'Kata rahsia melodi':'Petunjuk: sesuatu yang mempunyai rentak dan bunyi yang tersusun.',
+ 'Pilih kata yang membina':'Petunjuk: ayat terbaik mengakui kesilapan tetapi tidak melabel seseorang sebagai gagal.',
+ 'Surat yang menyentuh hati':'Petunjuk: mula dengan perasaan, kemudian mendengar, memberi ruang dan harapan.',
+ 'Perpustakaan tanpa dinding':'Petunjuk: helaian, halaman dan cerita.',
+ 'Perkataan yang menyatukan':'Petunjuk: tempat kita menyimpan rasa sayang dan keberanian.',
+ 'Tiga kunci, satu makna':'Petunjuk: fikirkan tiga tema—melangkah, mendengar muzik, membaca kata-kata.'
+};document.getElementById('feedback').textContent=hints[t.title]||'Baca semula soalan perlahan-lahan.'}
+function nextTask(){if(task<chapters[chapter].tasks.length-1){task++;renderTask();return}if(chapter<chapters.length-1){shell('Bab selesai',chapters[chapter].symbol+' Satu langkah lagi',`<p class="story">${chapters[chapter].bridge}</p><p class="muted">Kamu telah mengumpulkan satu lagi petunjuk tentang hadiah yang menunggu.</p>`,`<div class="actions"><button class="primary wide" onclick="chapter++;task=0;showChapterIntro()">Teruskan ke bab seterusnya →</button></div>`)}else showEnding()}
+function showEnding(){progress();let elapsed=Math.floor((Date.now()-started)/60000);shell('Penghujung perjalanan','Bukan sekadar hadiah',`<div class="symbol">✦ 👣 ♪ 🕊️ ✦</div><div class="ending">Akhirnya, kamu sampai juga.
+
+Tiga bab. Tiga pelajaran. Tiga hadiah.
+
+**Kasut** — semoga setiap langkah yang kamu ambil membawa kamu lebih dekat kepada masa depan yang kamu impikan. Jika jalannya sukar, ingatlah bahawa kamu tidak perlu berlari; terus melangkah pun sudah cukup berani.
+
+**Earphone** — semoga di tengah dunia yang bising, kamu sentiasa menemui melodi yang menenangkan. Semoga kamu tahu bila perlu mendengar dunia, dan bila perlu memberi ruang kepada diri sendiri.
+
+**Buku** — semoga kata-kata di dalamnya membuka pintu baharu dalam fikiranmu, melembutkan hari yang berat, dan mengingatkan kamu bahawa satu ayat yang ikhlas boleh tinggal lama di dalam hati.
+
+Aku memilih tiga hadiah ini kerana aku mahu kamu membawa sesuatu untuk setiap perjalanan: sesuatu untuk melangkah, sesuatu untuk mendengar, dan sesuatu untuk memahami.
+
+Dan jika suatu hari nanti kamu terlupa betapa berharganya dirimu, bukalah halaman ini sekali lagi dalam ingatan: masa depan dibina satu langkah demi satu langkah, kekacauan boleh menemukan melodinya, dan hati boleh berubah melalui kata-kata yang baik.
+
+**Selamat hari lahir.** Semoga tahun baharu hidupmu dipenuhi langkah yang berani, melodi yang indah, dan kata-kata yang membawa damai. Hadiah ini kecil berbanding segala kebaikan yang aku doakan untukmu.</div><p class="muted small">Masa perjalanan: ${elapsed} minit · Petunjuk diminta: ${hintUsed} · Cabaran diselesaikan: ${solved}/${totalTasks}</p>`,`<div class="actions"><button class="primary wide" onclick="start()">Main semula dari awal ↻</button></div>`)}
+window.begin=begin;window.renderTask=renderTask;window.choose=choose;window.pickItem=pickItem;window.undoPick=undoPick;window.hideSequence=hideSequence;window.memoryPick=memoryPick;window.resetMemory=resetMemory;window.checkAnswer=checkAnswer;window.showHint=showHint;window.nextTask=nextTask;window.start=start;
+start();
+})();
+</script>
+</body></html>
