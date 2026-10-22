@@ -109,7 +109,8 @@ function showHint(){let t=chapters[chapter].tasks[task];hintUsed++;let hints={
  'Perkataan yang menyatukan':'Petunjuk: tempat kita menyimpan rasa sayang dan keberanian.',
  'Tiga kunci, satu makna':'Petunjuk: fikirkan tiga tema—melangkah, mendengar muzik, membaca kata-kata.'
 };document.getElementById('feedback').textContent=hints[t.title]||'Baca semula soalan perlahan-lahan.'}
-function nextTask(){if(task<chapters[chapter].tasks.length-1){task++;renderTask();return}if(chapter<chapters.length-1){shell('Bab selesai',chapters[chapter].symbol+' Satu langkah lagi',`<p class="story">${chapters[chapter].bridge}</p><p class="muted">Kamu telah mengumpulkan satu lagi petunjuk tentang hadiah yang menunggu.</p>`,`<div class="actions"><button class="primary wide" onclick="chapter++;task=0;showChapterIntro()">Teruskan ke bab seterusnya →</button></div>`)}else showEnding()}
+function nextTask(){if(task<chapters[chapter].tasks.length-1){task++;renderTask();return}if(chapter<chapters.length-1){shell('Bab selesai',chapters[chapter].symbol+' Satu langkah lagi',`<p class="story">${chapters[chapter].bridge}</p><p class="muted">Kamu telah mengumpulkan satu lagi petunjuk tentang hadiah yang menunggu.</p>`,`<div class="actions"><button class="primary wide" onclick="nextChapter()">Teruskan ke bab seterusnya →</button></div>`)}else showEnding()}
+function nextChapter(){chapter++;task=0;showChapterIntro()}
 function showEnding(){progress();let elapsed=Math.floor((Date.now()-started)/60000);shell('Penghujung perjalanan','Bukan sekadar hadiah',`<div class="symbol">✦ 👣 ♪ 🕊️ ✦</div><div class="ending">Akhirnya, kamu sampai juga.
 
 Tiga bab. Tiga pelajaran. Tiga hadiah.
@@ -125,7 +126,7 @@ Aku memilih tiga hadiah ini kerana aku mahu kamu membawa sesuatu untuk setiap pe
 Dan jika suatu hari nanti kamu terlupa betapa berharganya dirimu, bukalah halaman ini sekali lagi dalam ingatan: masa depan dibina satu langkah demi satu langkah, kekacauan boleh menemukan melodinya, dan hati boleh berubah melalui kata-kata yang baik.
 
 **Selamat hari lahir.** Semoga tahun baharu hidupmu dipenuhi langkah yang berani, melodi yang indah, dan kata-kata yang membawa damai. Hadiah ini kecil berbanding segala kebaikan yang aku doakan untukmu.</div><p class="muted small">Masa perjalanan: ${elapsed} minit · Petunjuk diminta: ${hintUsed} · Cabaran diselesaikan: ${solved}/${totalTasks}</p>`,`<div class="actions"><button class="primary wide" onclick="start()">Main semula dari awal ↻</button></div>`)}
-window.begin=begin;window.renderTask=renderTask;window.choose=choose;window.pickItem=pickItem;window.undoPick=undoPick;window.hideSequence=hideSequence;window.memoryPick=memoryPick;window.resetMemory=resetMemory;window.checkAnswer=checkAnswer;window.showHint=showHint;window.nextTask=nextTask;window.start=start;
+window.begin=begin;window.renderTask=renderTask;window.choose=choose;window.pickItem=pickItem;window.undoPick=undoPick;window.hideSequence=hideSequence;window.memoryPick=memoryPick;window.resetMemory=resetMemory;window.checkAnswer=checkAnswer;window.showHint=showHint;window.nextTask=nextTask;window.nextChapter=nextChapter;window.start=start;
 start();
 })();
 </script>
