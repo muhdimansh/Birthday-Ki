@@ -27,13 +27,3 @@ All audio included in this package was programmatically synthesized specifically
 
 ## Illustrated visual edition
 This edition uses actual generated PNG backgrounds and gift art in `art/` (home, three chapter environments, three gift reveals, and finale), plus chapter-zone illustrated crops. Puzzles use visual, tappable boards with original correctness rules and all 3 hints. Audio remains locally bundled. Static files may be uploaded directly to GitHub Pages. Recommended: use desktop GitHub web interface or git to preserve folders; do not upload the ZIP itself.
-
-
-## Deluxe additions
-
-- 36 puzzle-specific illustrated hero panels in `art/puzzle_heroes/` now used directly inside each puzzle modal.
-- Bonus high-resolution posters in `art/posters/`.
-- Bonus wallpapers in `art/wallpapers/`.
-- Full package intentionally expanded beyond 50 MB with meaningful artwork rather than empty filler.
-
-Package note: trimmed to stay below the earlier 100 MB budget while still remaining above 50 MB.

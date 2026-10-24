@@ -125,4 +125,21 @@
 
 .stitchDiagram svg{width:100%;max-width:430px;height:auto;display:block;margin:auto;background:#18283599;border:1px solid #bea079;border-radius:12px}.stitchDiagram{margin:12px 0}
 
-.puzzleHero{margin:8px 0 16px;border-radius:18px;overflow:hidden;border:1px solid #e6c48d66;box-shadow:0 16px 40px #0007;background:#111}.puzzleHero img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}.puzzleHero::after{content:'';display:block;height:1px;background:linear-gradient(90deg,transparent,#efd4aa55,transparent)}
+
+/* Fix: visible hotspot objects above UI */
+#app{z-index:10}
+.hotspots{z-index:20}
+.hotspot{z-index:21;display:flex;align-items:center;gap:8px;max-width:min(250px,62vw)}
+.hotspot.active{padding:10px 16px;background:linear-gradient(135deg,#f3ddb0,#d8a472);color:#221a15;border:2px solid #ffefc5;box-shadow:0 10px 28px #0008,0 0 0 6px #f0d5aa22,0 0 32px #f0d5aa88}
+.hotspotTag{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#fff7dd;color:#8d5f21;font-weight:900;box-shadow:0 0 18px #fff0c0}
+.hotspotLabel{display:block;text-align:left;font-size:.8rem;line-height:1.15}
+.sceneHint{margin-top:12px;padding:12px 14px;border-radius:14px;background:#f4ddb218;color:#f3e7d4;border:1px solid #f0d4a055}
+.sceneHint strong{color:#ffe6bc}
+.sceneHint .spark{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#f2d39a;color:#5b3c18;font-weight:900;margin-right:6px}
+@media(max-width:650px){
+  .explore{padding-top:58px}
+  .hotspots{z-index:26}
+  .hotspot.active{top:24%!important;left:54%!important;max-width:56vw;padding:10px 12px}
+  .hotspot.observe{display:none!important}
+  .hotspotLabel{font-size:.72rem}
+}

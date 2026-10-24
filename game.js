@@ -12,6 +12,45 @@ function activeZone(){return Math.min(2,Math.floor((game.solved%12)/4))}
 function button(text,act,cls='btn',more=''){return `<button class="${cls}" data-act="${act}" ${more}>${text}</button>`}
 
 
+const hotspotMeta={
+L01:{label:'Batu jejak pertama',inspect:'Sentuh batu jejak yang berkilau untuk mula.' ,x:36,y:30},
+L02:{label:'Batu bernombor',inspect:'Cari batu dengan nombor yang menyala lembut.',x:52,y:34},
+L03:{label:'Peta berlampu',inspect:'Ada peta kecil yang bersinar di kawasan ini.',x:63,y:31},
+L04:{label:'Kompas pagi',inspect:'Periksa kompas yang memantulkan cahaya pagi.',x:73,y:35},
+L05:{label:'Lampu jambatan',inspect:'Empat lampu di jambatan sedang berkelip.',x:35,y:28},
+L06:{label:'Laluan air',inspect:'Ada pemutar paip berkilau dekat tepi laluan.',x:49,y:33},
+L07:{label:'Papan arah',inspect:'Satu papan arah sedang memanggil perhatian.',x:64,y:30},
+L08:{label:'Beg perjalanan',inspect:'Beg di hujung jambatan ada tanda berkilau.',x:76,y:35},
+L09:{label:'Cermin pondok',inspect:'Cermin di pondok memantulkan cahaya.',x:37,y:29},
+L10:{label:'Panel bintang',inspect:'Cari panel dengan corak bintang.',x:51,y:31},
+L11:{label:'Simpulan tali',inspect:'Ada simpulan terakhir yang perlu dibuka.',x:66,y:32},
+L12:{label:'Peti langkah',inspect:'Peti hadiah di pondok sedang berkilau.',x:77,y:36},
+M01:{label:'Tingkap hujan',inspect:'Ketukan datang dari tingkap yang bercahaya.',x:34,y:29},
+M02:{label:'Radio lama',inspect:'Radio di tepi tingkap sedang menyala.',x:50,y:33},
+M03:{label:'Sudut senyap',inspect:'Cari sudut paling senyap di bilik ini.',x:66,y:31},
+M04:{label:'Lampu rentak',inspect:'Lampu kecil mengikut rentak tertentu.',x:77,y:34},
+M05:{label:'Kaset rakaman',inspect:'Ada kaset di atas meja rakaman.',x:34,y:30},
+M06:{label:'Panel equalizer',inspect:'Panel equalizer menunjukkan aras ganjil.',x:49,y:34},
+M07:{label:'Arah bunyi',inspect:'Dengar dan lihat dari mana bunyi datang.',x:64,y:31},
+M08:{label:'Pembesar suara',inspect:'Kabel pembesar suara menunggu sambungan.',x:77,y:35},
+M09:{label:'Mesej radio',inspect:'Radio memancarkan mesej ringkas.',x:35,y:28},
+M10:{label:'Pantulan gema',inspect:'Cari permukaan yang memantulkan gema.',x:49,y:33},
+M11:{label:'Butang diam',inspect:'Ada satu cabaran untuk benar-benar diam sekejap.',x:64,y:31},
+M12:{label:'Kotak bunyi',inspect:'Kotak hadiah terakhir bab ini sedang bersinar.',x:78,y:36},
+D01:{label:'Tiga sampul',inspect:'Tiga sampul terletak di rak hadapan.',x:35,y:29},
+D02:{label:'Buku dicari',inspect:'Satu buku tertentu menyala di rak.',x:50,y:33},
+D03:{label:'Halaman koyak',inspect:'Ada helaian koyak di atas meja.',x:66,y:31},
+D04:{label:'Huruf pertama',inspect:'Cari petunjuk pada huruf yang menonjol.',x:78,y:35},
+D05:{label:'Timbangan buku',inspect:'Timbangan buku terletak di meja bacaan.',x:35,y:30},
+D06:{label:'Cahaya meja',inspect:'Lampu meja mendedahkan tulisan tersembunyi.',x:50,y:33},
+D07:{label:'Penanda buku',inspect:'Penanda buku berkilau di celah halaman.',x:66,y:30},
+D08:{label:'Dua lapisan',inspect:'Lihat dua lapisan cerita pada helaian ini.',x:77,y:34},
+D09:{label:'Tiga buku rak',inspect:'Tiga buku di rak ini sedang memanggil Ki.',x:35,y:29},
+D10:{label:'Surat dilipat',inspect:'Surat yang dilipat menunggu dibuka.',x:50,y:33},
+D11:{label:'Nama dalam halaman',inspect:'Nama tersembunyi dalam halaman buku.',x:66,y:31},
+D12:{label:'Halaman terakhir',inspect:'Kabinet akhir menyimpan halaman terakhir.',x:78,y:35}
+};
+function currentHotspot(){return hotspotMeta[currentPuzzle().id]||{label:currentPuzzle().title,inspect:'Sentuh tanda ✦ pada latar untuk buka teka-teki.',x:58,y:32};}
 
 function setModal(content){modalKind='open';$('#overlayRoot').hidden=false;$('#overlayRoot').innerHTML=`<section class="modal" role="dialog" aria-modal="true">${content}</section>`;document.body.classList.add('scrolllock');$('#overlayRoot').scrollTop=0}
 function closeModal(){clearInterval(waitTimer);waitTimer=null;$('#overlayRoot').hidden=true;$('#overlayRoot').innerHTML='';modalKind='';document.body.classList.remove('scrolllock')}
@@ -31,10 +70,11 @@ function render(){const screen=$('#screen'),h=$('#hotspots');if(game.solved>=36&
   world.setZone(0);screen.className='stage';screen.innerHTML=`<section class="introBox">${headerTag(game.chapter)}<h1 class="sectionTitle">${esc(c.name)}</h1><p class="lead">${esc(c.intro)}</p><p class="muted"><strong>${esc(c.sub)}</strong></p><div class="actions">${button('Masuk ke '+esc(c.places[0])+' →','enter','btn primary')}</div><div class="miniStats"><span>12 teka-teki</span><span>3 kawasan</span><span>1 hadiah</span></div></section>`;
  }else if(game.phase==='explore'){
   const done=game.solved%12,zone=activeZone();world.setZone(zone);const zStart=zone*4;let pct=done/12*100;
-  screen.className='explore';screen.innerHTML=`<div class="exploreTop"><div class="progressArea"><div class="tiny">Bab ${game.chapter+1} · ${esc(c.name)} · ${done}/12 selesai</div><div class="progress" aria-label="Kemajuan bab"><i style="width:${pct}%"></i></div><div class="small">Jumlah permainan: ${game.solved}/36 · Kemajuan disimpan secara automatik</div></div><div class="zoneNav">${c.places.map((p,i)=>`<button class="zoneBtn ${i===zone?'selected':''}" data-act="zone" data-i="${i}" ${i>zone?'disabled':''}>${i<zone?'✓ ':''}${esc(p)}</button>`).join('')}</div></div><div class="bottomBar"><div class="kicker">KAWASAN ${zone+1} / 3</div><h2>${esc(c.places[zone])}</h2><p>${esc(c.story[zone])}</p><div class="mapLine">${c.places.map((x,i)=>`<span class="mapNode ${i===zone?'now':i<zone?'done':''}">${i<zone?'✓ ':i===zone?'● ':'○ '}${esc(x)}</span>${i<2?'<span class="sep">→</span>':''}`).join('')}</div><div class="count">Teka-teki ${done+1} daripada 12 · ${esc(currentPuzzle().title)}</div><div class="actions" style="margin-top:12px">${button('Periksa objek berkilau ✦','puzzle','btn primary')}${button('Lihat petunjuk perjalanan','journal','btn ghost')}${button('Periksa kawasan','browse','btn ghost')}</div><div class="small" style="margin-top:13px">Sentuh objek berkilau ✦ untuk buka cabaran. Latar setiap bab dilukis khas untuk perjalanan Ki.</div></div>`;
-  h.innerHTML=`<button class="hotspot active" data-offset=".0" data-depth="2.6" data-height="1.2" data-act="puzzle" aria-label="Buka teka-teki ${esc(currentPuzzle().title)}">✦ ${esc(currentPuzzle().title)}</button>
-    <button class="hotspot observe one" data-offset="-1.7" data-depth="1.4" data-height="1.15" data-act="inspect" data-i="0">◌ Periksa sekitar</button>
-    <button class="hotspot observe two" data-offset="1.7" data-depth="1.4" data-height="1.15" data-act="inspect" data-i="1">◌ Lihat butiran</button>`;
+  const hs=currentHotspot();
+  screen.className='explore';screen.innerHTML=`<div class="exploreTop"><div class="progressArea"><div class="tiny">Bab ${game.chapter+1} · ${esc(c.name)} · ${done}/12 selesai</div><div class="progress" aria-label="Kemajuan bab"><i style="width:${pct}%"></i></div><div class="small">Jumlah permainan: ${game.solved}/36 · Kemajuan disimpan secara automatik</div></div><div class="zoneNav">${c.places.map((p,i)=>`<button class="zoneBtn ${i===zone?'selected':''}" data-act="zone" data-i="${i}" ${i>zone?'disabled':''}>${i<zone?'✓ ':''}${esc(p)}</button>`).join('')}</div></div><div class="bottomBar"><div class="kicker">KAWASAN ${zone+1} / 3</div><h2>${esc(c.places[zone])}</h2><p>${esc(c.story[zone])}</p><div class="mapLine">${c.places.map((x,i)=>`<span class="mapNode ${i===zone?'now':i<zone?'done':''}">${i<zone?'✓ ':i===zone?'● ':'○ '}${esc(x)}</span>${i<2?'<span class="sep">→</span>':''}`).join('')}</div><div class="count">Teka-teki ${done+1} daripada 12 · ${esc(currentPuzzle().title)}</div><div class="sceneHint"><span class="spark">✦</span> Objek aktif sekarang: <strong>${esc(hs.label)}</strong><br><small>${esc(hs.inspect)}</small></div><div class="actions" style="margin-top:12px">${button('Tak nampak tanda ✦? Buka teka-teki terus','puzzle','btn primary')}${button('Lihat petunjuk perjalanan','journal','btn ghost')}${button('Periksa kawasan','browse','btn ghost')}</div><div class="small" style="margin-top:13px">Sekarang Ki memang boleh tekan tanda ✦ pada latar belakang. Butang utama di atas cuma pilihan sandaran kalau hotspot terlepas pandang.</div></div>`;
+  h.innerHTML=`<button class="hotspot active" style="left:${hs.x}%;top:${hs.y}%;" data-act="puzzle" aria-label="Sentuh ${esc(hs.label)} untuk buka teka-teki ${esc(currentPuzzle().title)}"><span class="hotspotTag">✦</span><span class="hotspotLabel">${esc(hs.label)}</span></button>
+    <button class="hotspot observe one" style="left:24%;top:50%;" data-act="inspect" data-i="0">◌ Periksa sekitar</button>
+    <button class="hotspot observe two" style="left:77%;top:57%;" data-act="inspect" data-i="1">◌ Lihat butiran</button>`;
   const signature=game.chapter*3+zone;
   if(visitedScene!==signature){visitedScene=signature;cinematicBeat(game.chapter,zone)}
  }else if(game.phase==='gift'){
@@ -59,14 +99,14 @@ function browseArea(){
  const z=activeZone(),c=game.chapter;
  let rows=environmentNotes?.[c]?.[z]||[];
  setModal(`<div class="modalHead"><div><div class="kicker">Periksa tempat ini</div><h2 class="modalTitle">${esc(chapters[c].places[z])}</h2></div><button class="close" data-act="close" aria-label="Tutup">✕</button></div>
- <p class="prompt">Ki boleh sentuh barang-barang di sini. Semuanya cuma untuk menikmati tempat ini—teka-teki utama masih di objek berkilau.</p>
+ <p class="prompt">Ki boleh sentuh barang-barang di sini untuk menikmati suasana tempat ini. Teka-teki utama dibuka dengan tanda ✦ yang nampak jelas pada objek aktif.</p>
  <div class="discoverGrid">${rows.map(([name,info],i)=>`<button class="discovery" data-act="inspect" data-i="${i}"><b>${esc(name)}</b><span>Sentuh untuk periksa →</span></button>`).join('')}</div>
  <div class="actions">${button('Kembali ke dunia','close','btn primary')}</div>`);
 }
 function journal(){let c=chapters[game.chapter],done=game.solved%12;let ci=game.phase==='final'?3:game.chapter;let content='<p class="muted">Di sini Ki boleh tengok hadiah, tempat dan petunjuk yang dah ditemui.</p>';
  for(let k=0;k<3;k++){let cc=chapters[k],n=game.phase==='final'||k<ci?12:k===ci?done:0;content+=`<section class="figure"><h4>Bab ${k+1} · ${esc(cc.name)} — ${n}/12</h4><p>${esc(cc.sub)} ${n===12?'· Hadiah: '+cc.gift:''}</p>${n>0?`<div class="badges" style="margin-top:8px">${puzzles.slice(k*12,k*12+n).map(p=>`<span class="selection" title="${esc(p.title)}">✓ ${esc(p.title)}</span>`).join('')}</div>`:''}</section>`}
  setModal(`<div class="modalHead"><div><div class="kicker">Peta & Jurnal</div><h2 class="modalTitle">Perjalanan Ki</h2></div><button class="close" data-act="close" aria-label="Tutup">✕</button></div>${content}<div class="actions">${button('Kembali','close','btn primary')}</div>`)}
-function instruction(){screenModal('Cara bermain',`Lihat ilustrasi setiap bab dan tekan objek berkilau ✦ untuk menyelesaikan teka-teki interaktif.\n\nSetiap teka-teki ada tiga petunjuk yang makin jelas. Petunjuk ketiga memberi jawapan supaya Ki tidak tersekat.\n\nTak perlu hidupkan bunyi. Cabaran Melodi juga ada corak visual. Tiada masa tamat atau penalti. Kemajuan disimpan pada pelayar ini.\n\nJika sesuatu kawalan tidak serasi dengan telefon, cuba butang alternatif yang dipaparkan pada panel teka-teki.`)}
+function instruction(){screenModal('Cara bermain',`Lihat ilustrasi setiap bab dan tekan tanda ✦ yang jelas pada objek aktif untuk menyelesaikan teka-teki interaktif.\n\nSetiap teka-teki ada tiga petunjuk yang makin jelas. Petunjuk ketiga memberi jawapan supaya Ki tidak tersekat.\n\nTak perlu hidupkan bunyi. Cabaran Melodi juga ada corak visual. Tiada masa tamat atau penalti. Kemajuan disimpan pada pelayar ini.\n\nJika sesuatu kawalan tidak serasi dengan telefon, cuba butang alternatif yang dipaparkan pada panel teka-teki.`)}
 function initialPuzzleState(p){let state={pick:null,seq:[],items:[],toggles:p.switches?p.switches.map(()=>false):[],pipes:p.pipeChoices?p.pipeChoices.map(a=>a[0]):[],sliders:p.labels?p.labels.map(()=>0):p.type==='radio'?[0]:[],cell:null,wire:{},path:p.type==='path'?[p.safe[0]]:[],angle:0,code:'',letter:[],match:p.labels?p.labels.map(()=>null):[],still:false,correct:false};return state}
 function displayFigure(p){if(p.figure==='papan_jahitan')return `<div class="figure"><h4>Kad jahitan — ikut anak panah bermula di 1</h4><svg style="width:100%;height:auto;max-height:170px" viewBox="0 0 370 150" role="img" aria-label="Enam mata bernombor disambung dengan anak panah"><defs><marker id="needleArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="none" stroke="#e8d0a5" stroke-width="1.2"/></marker></defs>${[[[30,93],[110,30]],[[110,30],[165,104]],[[165,104],[240,30]],[[240,30],[295,92]],[[295,92],[350,107]]].map((pair,i)=>`<line x1="${pair[0][0]}" y1="${pair[0][1]}" x2="${pair[1][0]}" y2="${pair[1][1]}" stroke="${i%2?'#a7dcc3':'#e9c894'}" stroke-width="3" marker-end="url(#needleArrow)" />`).join('')}${[[30,93,1],[165,104,2],[295,92,3],[110,30,4],[240,30,5],[350,107,6]].map(([x,y,n])=>`<circle cx="${x}" cy="${y}" r="16" fill="#213e48" stroke="#f2d5a2" stroke-width="2"/><text x="${x}" y="${y+5}" fill="#fff1d2" text-anchor="middle" font-size="15" font-weight="bold">${n}</text>`).join('')}</svg></div>`;if(!p.figure)return'';return `<div class="figure"><h4>Petunjuk pada objek</h4><p style="white-space:pre-line;font-weight:700;font-size:${p.figure.length<60?'1.15rem':'.95rem'}">${esc(p.figure)}</p></div>`}
 function genericChoices(p,arr){return `<div class="choices">${arr.map((t,i)=>`<button class="choice ${ps.pick===t?'chosen':''}" data-choose="${i}" aria-pressed="${ps.pick===t}">${esc(t)}</button>`).join('')}</div>`}
@@ -95,7 +135,7 @@ function puzzleControls(p){ const visual=window.KI_VISUAL_PUZZLES?.render(p,ps);
  default:return '<div class="notice fail">Kawalan belum tersedia.</div>'
 }}
 function showPuzzle(){let p=currentPuzzle();if(!ps||ps.id!==p.id){ps={...initialPuzzleState(p),id:p.id};notice=''}let hintsShown=game.hints[p.id]||0,body=puzzleControls(p);let completed=ps.correct;
- const hero='art/puzzle_heroes/'+p.id+'.jpg';setModal(`<div class="modalHead"><div><div class="kicker">Bab ${game.chapter+1} · Teka-teki ${game.solved%12+1} / 12</div><h2 class="modalTitle">${esc(p.title)}</h2></div><button class="close" data-act="close" aria-label="Tutup">✕</button></div><div class="puzzleHero"><img src="${hero}" alt="Ilustrasi teka-teki ${esc(p.title)}"></div><p class="prompt"><strong>${esc(p.prompt.length>150?p.prompt.slice(0,148)+'…':p.prompt)}</strong></p><div class="puzzlePanel">${body}</div>${p.prompt.length>150?`<details class="puzzleInstructions"><summary>Peraturan penuh teka-teki</summary><p>${esc(p.prompt)}</p></details>`:''}${notice?`<p role="status" class="notice ${completed?'ok':'fail'}">${esc(notice)}</p>`:''}<div class="hints"><div class="tiny">PETUNJUK <span class="small">(${hintsShown}/3 dibuka)</span></div>${Array.from({length:hintsShown},(_,i)=>`<div class="hintBox"><strong>Petunjuk ${i+1}:</strong> ${esc(p.hints[i])}</div>`).join('')}</div><div class="footerBtns"><div>${hintsShown<3?button('💡 '+(hintsShown===0?'Petunjuk 1':'Petunjuk '+(hintsShown+1)),'hint','btn ghost'):''}</div><div class="actions" style="margin-top:0">${button('Kembali','close','btn ghost')}${completed?button('Teruskan →','advance','btn primary'):button('Semak jawapan','check','btn primary')}</div></div><p class="small">Jawapan salah tak akan bawa Ki ke teka-teki seterusnya. Semua petunjuk boleh digunakan.</p>`);
+ setModal(`<div class="modalHead"><div><div class="kicker">Bab ${game.chapter+1} · Teka-teki ${game.solved%12+1} / 12</div><h2 class="modalTitle">${esc(p.title)}</h2></div><button class="close" data-act="close" aria-label="Tutup">✕</button></div><p class="prompt"><strong>${esc(p.prompt.length>150?p.prompt.slice(0,148)+'…':p.prompt)}</strong></p><div class="puzzlePanel">${body}</div>${p.prompt.length>150?`<details class="puzzleInstructions"><summary>Peraturan penuh teka-teki</summary><p>${esc(p.prompt)}</p></details>`:''}${notice?`<p role="status" class="notice ${completed?'ok':'fail'}">${esc(notice)}</p>`:''}<div class="hints"><div class="tiny">PETUNJUK <span class="small">(${hintsShown}/3 dibuka)</span></div>${Array.from({length:hintsShown},(_,i)=>`<div class="hintBox"><strong>Petunjuk ${i+1}:</strong> ${esc(p.hints[i])}</div>`).join('')}</div><div class="footerBtns"><div>${hintsShown<3?button('💡 '+(hintsShown===0?'Petunjuk 1':'Petunjuk '+(hintsShown+1)),'hint','btn ghost'):''}</div><div class="actions" style="margin-top:0">${button('Kembali','close','btn ghost')}${completed?button('Teruskan →','advance','btn primary'):button('Semak jawapan','check','btn primary')}</div></div><p class="small">Jawapan salah tak akan bawa Ki ke teka-teki seterusnya. Semua petunjuk boleh digunakan.</p>`);
  if(completed){for(let el of $('#overlayRoot').querySelectorAll('.puzzlePanel button,.puzzlePanel select,.puzzlePanel input'))el.disabled=true}
 }
 function correctValue(p){switch(p.type){case 'pick':case 'rhythm':case 'bookcase':return ps.pick;
