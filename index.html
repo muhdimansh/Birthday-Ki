@@ -172,7 +172,8 @@ function showHint(){
   'Petunjuk 3: Taip ketiga-tiganya mengikut urutan bab, dipisahkan dengan koma: kasut, earphone, buku.'
  ]
  };
- const clues=clueSets[t.title];
+ const clueKey=t.title.replace(/^\d+\.\s*/, '');
+ const clues=clueSets[clueKey];
  if(!clues){document.getElementById('feedback').textContent='Petunjuk: baca semula soalan dan cari kata kunci yang paling khusus.';return;}
  window.hintLevels=window.hintLevels||{};
  const key=chapter+'-'+task;
