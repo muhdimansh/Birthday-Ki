@@ -1,0 +1,1 @@
+Update only these files at the ROOT of your Birthday-Ki GitHub repository: index.html, game.js, style.css. Keep all original folders. Commit changes, then open GitHub Pages and reload. No need to reset saved puzzle progress.

@@ -143,3 +143,34 @@
   .hotspot.observe{display:none!important}
   .hotspotLabel{font-size:.72rem}
 }
+
+/* Touch fix v4: interactive objects float above the scene & panels */
+#hotspots.hotspots{position:fixed!important;inset:0;z-index:16!important;pointer-events:none!important;overflow:visible}
+#hotspots .hotspot{pointer-events:auto!important;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;min-width:144px;min-height:62px;white-space:normal;gap:11px;transform:translate(-50%,-50%)}
+#hotspots .hotspot.active{max-width:min(260px,70vw);padding:10px 14px;border-radius:20px;animation:none;transition:box-shadow .2s,transform .2s}
+#hotspots .hotspot.active:active{transform:translate(-50%,-50%) scale(.96);box-shadow:0 0 45px #ffdd99}
+#hotspots .objectGlyph{display:grid;place-items:center;flex:none;width:58px;height:58px;border-radius:15px;background:linear-gradient(135deg,#fff8e8,#e6bf86);border:1px solid #fff1d8;color:#362b1f;font-size:2.1rem;box-shadow:0 2px 20px #fff5}
+#hotspots .objectInfo{display:flex;flex-direction:column;text-align:left;gap:2px;line-height:1.15}
+#hotspots .objectInfo strong{font-size:.89rem}
+#hotspots .objectStar{font-size:.59rem;letter-spacing:.08em;font-weight:850;color:#765225}
+#overlayRoot{z-index:40}
+body.scrolllock #hotspots{visibility:hidden;pointer-events:none!important}
+.sceneDock{width:min(630px,100%)}
+.sceneDock h2{margin-bottom:8px}
+.sceneObjective{color:#f5dfb7;font-size:.87rem;margin:0 0 7px}
+.sceneGuide{font-size:.9rem;color:#ddd3c8}
+.sceneGuide strong{color:#fbe4b8}
+.sceneDetails{margin-top:10px;border-top:1px solid #ffffff40;padding-top:8px}
+.sceneDetails summary{font-size:.82rem;font-weight:700;color:#f5d8a4;cursor:pointer}
+.sceneDetails[open] p{margin-top:12px;margin-bottom:0;line-height:1.6}
+.sceneDetails[open] .actions{margin-top:12px}
+@media(max-width:650px){
+  #hotspots .hotspot.active{left:50%!important;top:40%!important;max-width:76vw;min-height:76px;padding:10px 12px}
+  #hotspots .hotspot.observe{display:none!important}
+  .explore{min-height:calc(100dvh - 68px)!important;padding:55px 13px 20px!important;justify-content:space-between}
+  .exploreTop{margin-top:6px}
+  .bottomBar.sceneDock{padding:16px 18px!important;max-width:100%;margin-bottom:0!important}
+  .sceneDock h2{font-size:1.37rem!important}
+  .sceneGuide{font-size:.81rem}
+  .sceneDetails[open]{max-height:35vh;overflow-y:auto}
+}
